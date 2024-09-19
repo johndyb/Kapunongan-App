@@ -1,0 +1,38 @@
+.custom-container {
+  margin: 30px;
+  
+}
+
+.profile {
+  font-size: 2rem;
+}
+
+.react-calendar {
+  max-width: 300px;
+  margin: 0 auto;
+}
+.nav-link {
+  color: white; /* Default color for links */
+  
+}
+
+.nav-link.active {
+  background-color: #007bff; /* Active link color */
+  color: white; /* Text color for active link */
+}
+
+.dropdown-toggle {
+  color: white; /* Dropdown text color */
+}
+
+.dropdown-menu {
+  background-color: #343a40; /* Dropdown background color */
+}
+
+.dropdown-item {
+  color: white; /* Dropdown item text color */
+}
+
+.dropdown-item:hover {
+  background-color: #007bff; /* Dropdown item hover color */
+}

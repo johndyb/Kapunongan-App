@@ -1,0 +1,189 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.custom-size {
+  height: 40px; 
+  font-size: 1rem; 
+  padding: 0.5rem; 
+}
+.size{
+
+  height: 20px;
+}
+.size1{
+
+  height: 40px;
+}
+.profile{
+  height: 30px;
+}
+.table {
+  width: 80%;
+  max-width: 1200px;
+  border-collapse: collapse;
+  margin: 0 auto;
+ 
+}
+
+.cell {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+.color {
+
+ 
+  color: 'green';
+  border: 'none';
+  padding: '10px 20px';
+  cursor: 'pointer';
+  
+}
+/*------TABLE*/
+.col-actions {
+  width: 20%;
+}
+.col-actions2 {
+  width: 15%;
+}
+.col-actions3 {
+  width: 5%;
+}
+
+.col-actions1 {
+  width: 10%;
+}
+.header {
+  background-color: gray;
+  display: flex;
+  justify-content: space-between;
+
+  -webkit-text-fill-color: aliceblue;
+}
+/* Ensure the body and html take full height */
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+/* Ensure the main container fills the viewport height */
+.container-fluid {
+  height: 100%;
+  width: 100px;
+}
+
+/* Ensure the sidebar fills the available height */
+.bg-dark {
+  height: 100vh;
+}
+
+/* Adjust the content area */
+.col {
+  flex: 2;
+}
+
+.alot{
+  float: right;
+  
+}
+.custom-container {
+  background-color: rgb(88, 76, 76); /* Set background color to brown */
+  color: white; /* Ensure text is readable on brown background */
+  text-align: left; /* Align text to the left */
+  padding: 20px; /* Add some padding for better spacing */
+  margin: 0; /* Remove default margin if necessary */
+  width: 20%; /* Adjust the width to be more visible, e.g., 70% */
+  border: 3px solid #d3b99f; /* Add a border with a color */
+  border-radius: 8px; /* Rounded corners for a softer look */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for a lifted effect */
+}
+.custom-container1 {
+  background-color: rgb(88, 76, 76); /* Set background color to brown */
+  color: white; /* Ensure text is readable on brown background */
+  text-align: left; /* Align text to the left */
+  padding: 20px; /* Add some padding for better spacing */
+  margin: 0; /* Remove default margin if necessary */
+  width: 20%; /* Adjust the width to be more visible, e.g., 70% */
+  border: 3px solid #d3b99f; /* Add a border with a color */
+  border-radius: 8px; /* Rounded corners for a softer look */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for a lifted effect */
+}
+
+/* General link styles */
+.nav-link {
+  color: rgb(9, 236, 123);
+  text-decoration: none;
+  transition: color 0.3s, background-color 0.3s; /* Smooth transition for color changes */
+}
+
+/* Hover effect for the Dashboard and Home links */
+.nav-link:hover {
+  color: #62ec05; /* Highlight color on hover */
+  background-color: rgba(255, 255, 255, 0.2); /* Slight background color change for contrast */
+  border-radius: 4px; /* Rounded corners for the hover background */
+  padding: 10px; /* Extra padding to make the hover effect more pronounced */
+}
+
+/* Active link styling */
+.nav-link {
+  color: white; /* Default color for links */
+}
+
+.nav-link.active {
+  background-color: #007bff; /* Active link color */
+  color: white; /* Text color for active link */
+}
+
+.dropdown-toggle {
+  color: white; /* Dropdown text color */
+}
+
+.dropdown-menu {
+  background-color: #343a40; /* Dropdown background color */
+}
+
+.dropdown-item {
+  color: white; /* Dropdown item text color */
+}
+
+.dropdown-item:hover {
+  background-color: #007bff; /* Dropdown item hover color */
+}
+
+
+
+
