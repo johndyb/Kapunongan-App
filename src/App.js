@@ -135,7 +135,12 @@ function App() {
         forceUpdate();
         setEditId(null);
         setShow(false);
-        Swal.fire("Member Updated!");
+        Swal.fire({
+          title: `UPDATED `,
+          text: 'Member Updated!',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
 
       } catch (error) {
         Swal.fire("Error updating user!");
@@ -153,7 +158,12 @@ function App() {
       const userDoc = doc(db, "users", id);
       await deleteDoc(userDoc);
       forceUpdate();
-      Swal.fire("Member Deleted!");
+      Swal.fire({
+        title: `DELETED `,
+        text: 'Member Deleted!',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });
     } catch (error) {
       Swal.fire("Error deleting user!");
       console.error("Error deleting user: ", error);
@@ -246,7 +256,7 @@ function App() {
         ...prevState,
         [userId]: status
       }));
-      Swal.fire(`Member status updated to ${status}!`);
+      Swal.fire(`Member Status Updated to "${status}"!`);
       forceUpdate();
     } catch (error) {
       Swal.fire("Error updating status!");
@@ -391,7 +401,7 @@ function App() {
                         <Modal.Title>{editId ? "EDIT MEMBER" : "ADD MEMBER"}</Modal.Title>
                       </Modal.Header>
                       <Modal.Body>
-                NAME:
+                COMPLETE NAME:
                 <center>
                   <input
                     className="form-control"
