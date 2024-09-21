@@ -331,6 +331,7 @@ function App() {
                   <span className="fs-5 d-none d-sm-inline">Menu</span>
                   <CIcon icon={icon.cilList} className="profile p-2" />
                 </Link>
+                
                 <ul className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                 <li className="nav-item">
                   <NavLink
@@ -352,6 +353,9 @@ function App() {
                   </NavLink>
                 </li>
               </ul>
+              <div>
+                <img src="/images/1.jpg" alt="" className="round-image"/>
+              </div>
               <div className="dropdown pb-4">
 
                   <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">

@@ -181,7 +181,13 @@ html, body {
   color: white; /* Maintain text color on hover */
 }
 
-
+.round-image {
+  border-radius: 50%; /* Makes the image round */
+  width: 100px; /* Set your desired width */
+  height: 100px; /* Set your desired height */
+  object-fit: cover; /* Ensures the image covers the area without distortion */
+  margin-bottom: 40px; /* Adjust this value to move the image up */
+}
 
 
 
