@@ -1,0 +1,28 @@
+.sidebar {
+  width: 200px;
+  background-color: #343a40; /* Dark background */
+  color: white;
+  padding: 20px;
+  height: 100vh; /* Full height */
+  position: fixed; /* Fixed positioning */
+}
+
+.sidebar h2 {
+  text-align: center;
+}
+
+.link {
+  display: block;
+  padding: 10px;
+  color: white;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.link:hover {
+  background-color: #495057; /* Darker gray on hover */
+}
+
+.active-link {
+  background-color: #007bff; /* Blue for active link */
+}

@@ -13,16 +13,7 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
+
 
 .App-link {
   color: #61dafb;
@@ -147,42 +138,49 @@ html, body {
 .nav-link {
   color: rgb(9, 236, 123);
   text-decoration: none;
-  transition: color 0.3s, background-color 0.3s; /* Smooth transition for color changes */
+  transition: color 0.3s, background-color 0.3s, padding 0.3s; /* Smooth transition for color changes */
+  padding: 10px 15px; /* Add padding for better click area */
+  border-radius: 4px; /* Rounded corners */
+  width: 130px;
 }
 
-/* Hover effect for the Dashboard and Home links */
 .nav-link:hover {
   color: #62ec05; /* Highlight color on hover */
   background-color: rgba(255, 255, 255, 0.2); /* Slight background color change for contrast */
-  border-radius: 4px; /* Rounded corners for the hover background */
-  padding: 10px; /* Extra padding to make the hover effect more pronounced */
-}
-
-/* Active link styling */
-.nav-link {
-  color: white; /* Default color for links */
 }
 
 .nav-link.active {
-  background-color: #007bff; /* Active link color */
+  background-color: #007bff; /* Active link background color */
   color: white; /* Text color for active link */
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3); /* Subtle shadow for active link */
 }
 
 .dropdown-toggle {
   color: white; /* Dropdown text color */
+  transition: color 0.3s; /* Smooth color transition */
+}
+
+.dropdown-toggle:hover {
+  color: #62ec05; /* Highlight color on hover */
 }
 
 .dropdown-menu {
   background-color: #343a40; /* Dropdown background color */
+  border-radius: 4px; /* Rounded corners for dropdown */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for dropdown */
 }
 
 .dropdown-item {
   color: white; /* Dropdown item text color */
+  padding: 10px 15px; /* Padding for dropdown items */
+  transition: background-color 0.3s; /* Smooth background transition */
 }
 
 .dropdown-item:hover {
   background-color: #007bff; /* Dropdown item hover color */
+  color: white; /* Maintain text color on hover */
 }
+
 
 
 

@@ -5,7 +5,7 @@ import { db } from "./firebase-config";
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc, where, query } from "firebase/firestore";
 import Swal from 'sweetalert2';
 import CIcon from '@coreui/icons-react';
 import * as icon from '@coreui/icons';
@@ -15,18 +15,21 @@ import Navbar from 'react-bootstrap/Navbar';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import Dashboard from './Dashboard';
-
-
+import { NavLink } from "react-router-dom";
+import { serverTimestamp } from "firebase/firestore";
 
 
 
 
 function App() {
   
+  
   // Modal state
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [payorId, setPayorId] = useState(null);
+
 
   // Form state
   const [newName, setNewName] = useState("");
@@ -42,6 +45,7 @@ function App() {
   const [buttonStatus, setButtonStatus] = useState({});
   const [newContactNumber, setNewContactNumber] = useState("");
 
+
   // State for dropdown status
   const [dropdownStatus, setDropdownStatus] = useState({});
 
@@ -54,10 +58,43 @@ function App() {
 
   // Collection reference
   const usersCollectionRef = collection(db, "users");
-
+  const paymentRef = collection(db,"payments");
   // Reducer for refreshing data
   const [reducerValue, forceUpdate] = useReducer(x => x + 1, 0);
 
+  const [showDeceasedModal, setShowDeceasedModal] = useState(false);
+  const [deceasedUsers, setDeceasedUsers] = useState([]);
+  const [selectedDeceasedUser, setSelectedDeceasedUser] = useState(null);
+  const [selectedPaymentList,setSelectedPaymentList] = useState([]);
+
+
+  const getDeceaseByPayorId = async (id) =>{
+    const q = query(paymentRef,where("payorId","==",id));
+
+    const data = await getDocs(q);
+    
+    const  paymentList = data.docs.map((doc)=>({id:doc.id,...doc.data()}));
+    console.log("LIST",paymentList)
+    setSelectedPaymentList(paymentList)
+  }
+
+  useEffect(() => {
+    const getUsers = async () => {
+      try {
+        const data = await getDocs(usersCollectionRef);
+        const usersList = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+        setUsers(usersList);
+        setFilteredUsers(usersList);
+        
+        const deceased = usersList.filter(user => user.status === 'DECEASED');
+        setDeceasedUsers(deceased);
+        setHasDeceasedUsers(deceased.length > 0); // Update this line
+      } catch (error) {
+        console.error("Error fetching users: ", error);
+      }
+    };
+    getUsers();
+  }, [reducerValue]);
   // Add user
   const createUser = async () => {
     try {
@@ -65,12 +102,18 @@ function App() {
         name: newName, 
         age: Number(newAge), 
         contactNumber: newContactNumber,  // Add this line
+        createdAt: serverTimestamp(),
         status: 'ACTIVE', 
         payment: 'danger' 
       });
       forceUpdate();
       setShow(false);
-      Swal.fire("User Added 1 user!");
+      Swal.fire({
+        title: `success `,
+        text: 'New Member Added!',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });
 
     } catch (error) {
       Swal.fire("Error adding user!");
@@ -92,7 +135,7 @@ function App() {
         forceUpdate();
         setEditId(null);
         setShow(false);
-        Swal.fire("User Updated!");
+        Swal.fire("Member Updated!");
 
       } catch (error) {
         Swal.fire("Error updating user!");
@@ -110,7 +153,7 @@ function App() {
       const userDoc = doc(db, "users", id);
       await deleteDoc(userDoc);
       forceUpdate();
-      Swal.fire("User Deleted!");
+      Swal.fire("Member Deleted!");
     } catch (error) {
       Swal.fire("Error deleting user!");
       console.error("Error deleting user: ", error);
@@ -183,64 +226,77 @@ function App() {
     setCurrentPage(pageNumber);
   };
 
-  // Handle button color and icon toggle
-  const handleStatusToggle = async (userId) => {
-    try {
-      // Check if the user is deceased
-      if (dropdownStatus[userId] === 'DECEASED') {
-        Swal.fire("Cannot update payment status for deceased users!");
-        return;
-      }
+ 
+  
 
-      // Get the current status of the payment button
-      const currentStatus = buttonStatus[userId] || 'danger';
-      // Toggle the payment status
-      const newStatus = currentStatus === 'success' ? 'danger' : 'success';
-
-      // Update the payment status in the database
-      const userDoc = doc(db, "users", userId);
-      await updateDoc(userDoc, { payment: newStatus });
-
-      // Update the button status state
-      setButtonStatus(prevState => ({
-        ...prevState,
-        [userId]: newStatus
-      }));
-
-      // Show success message
-      Swal.fire(`Payment status updated to ${newStatus === 'success' ? 'Paid' : 'Unpaid'}!`);
-    } catch (error) {
-      Swal.fire("Error updating status!");
-      console.error("Error updating status: ", error);
-    }
-  };
+ 
 
   // Handle dropdown action click
   const handleActionClick = async (userId, status) => {
     const userDoc = doc(db, "users", userId);
-  
     try {
       const updateData = { status: status };
       if (status === 'DECEASED') {
-        // Set the date when user is marked as deceased
-        updateData.deceasedDate = new Date();
+        updateData.deceasedDate = new Date(); // Ensure this is the current date
       } else {
-        // Clear the deceased date if status is not DECEASED
-        updateData.deceasedDate = null;
+        updateData.deceasedDate = null; // Reset if not deceased
       }
-      
       await updateDoc(userDoc, updateData);
       setDropdownStatus(prevState => ({
         ...prevState,
         [userId]: status
       }));
-      Swal.fire(`User status updated to ${status}!`);
+      Swal.fire(`Member status updated to ${status}!`);
       forceUpdate();
     } catch (error) {
       Swal.fire("Error updating status!");
       console.error("Error updating status: ", error);
     }
   };
+
+  const updatePaymentStatusForDeceased = async () => {
+    if (selectedDeceasedUser && payorId) {
+        try {
+            console.log("Updating payment status...");
+            const userDoc = doc(db, "users", selectedDeceasedUser);
+            console.log("Payment status updated in user document.");
+            const currentStatus = buttonStatus[selectedDeceasedUser] || 'danger';
+            const newStatus = currentStatus === 'success' ? 'danger' : 'success';
+
+          
+            await updateDoc(userDoc, { payment: newStatus });
+
+       
+            await addDoc(collection(db, "payments"), {
+                userId: selectedDeceasedUser,
+                payeeId: selectedDeceasedUser, 
+                payorId: payorId, 
+                status: newStatus,
+                timestamp: serverTimestamp(),
+            });
+            console.log("Payment record added to Firestore.");
+            setButtonStatus(prevState => ({
+                ...prevState,
+                [selectedDeceasedUser]: newStatus,
+            }));
+
+            Swal.fire({
+              title: `Payment Status `,
+              text: 'Your payment was successful!',
+              icon: 'success',
+              confirmButtonText: 'OK'
+            });
+            setShowDeceasedModal(false);
+            setSelectedDeceasedUser(null);
+        } catch (error) {
+            Swal.fire("Error updating payment status!");
+            console.error("Error updating payment status: ", error);
+        }
+    } else {
+        Swal.fire("User ID or Payor ID is not defined!");
+    }
+};
+
   
 
   // Page numbers
@@ -248,26 +304,28 @@ function App() {
   for (let i = 1; i <= Math.ceil(filteredUsers.length / itemsPerPage); i++) {
     pageNumbers.push(i);
   }
+  const handleShowDeceased = async(id) => {
+    console.log("CLICK",id);
+    await getDeceaseByPayorId(id);
+     setShowDeceasedModal(true);
+     setPayorId(id); // 
+};
+  
+
+  const isHasPayment = (deceaseUserId) =>{
+    const filterData = selectedPaymentList.filter(val=>deceaseUserId === val.payeeId);
+    console.log(filterData)
+    return filterData.length > 0;
+  }
 
   return (
     
     <Router>
       <div className="App">
-        <Navbar className="header">
-          <Container>
-            <Navbar.Brand href="#home"></Navbar.Brand>
-            <Navbar.Toggle />
-            <Navbar.Collapse className="justify-content-end">
-              <Navbar.Text>
-                Signed in as: <a href="#login" className="alot">ADMIN</a>
-                <CIcon icon={icon.cilUser} className="profile" />
-              </Navbar.Text>
-            </Navbar.Collapse>
-          </Container>
-        </Navbar>
-      <div className="container-fluid">
+        
+      <div className="container-fluid ">
           <div className="row flex-nowrap">
-            <div className="col-md-3 col-xl-1 px-sm-1 px-0 bg-dark">
+            <div className="col-md-3 col-xl-1  px-0 bg-dark ">
               <div className="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
                 <Link to="/" className="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                   <span className="fs-5 d-none d-sm-inline">Menu</span>
@@ -275,18 +333,27 @@ function App() {
                 </Link>
                 <ul className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                 <li className="nav-item">
-                  <Link className={`nav-link align-middle px-0 ${window.location.pathname === '/' ? 'active' : ''}`} to="/"><Navbar.Toggle />
+                  <NavLink
+                    className={`nav-link align-middle px-0`}
+                    to="/"
+                    activeClassName="active" // Apply active class
+                  >
                     <CIcon icon={icon.cilHome} className="profile" /> <span className="ms-1 d-none d-sm-inline">Home</span>
-                  </Link>
+                  </NavLink>
                   <br />
                 </li>
                 <li className="nav-item">
-                  <Link className={`nav-link px-0 align-middle ${window.location.pathname === '/dashboard' ? 'active' : ''}`} to="/dashboard">
+                  <NavLink
+                    className={`nav-link px-0 align-middle`}
+                    to="/dashboard"
+                    activeClassName="active" // Apply active class
+                  >
                     <CIcon icon={icon.cilColorPalette} className="profile" /> <span className="ms-1 d-none d-sm-inline">Dashboard</span>
-                  </Link>
+                  </NavLink>
                 </li>
               </ul>
               <div className="dropdown pb-4">
+
                   <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                     <span className="d-none d-sm-inline mx-1">ADMIN</span>
                   </a>
@@ -311,7 +378,7 @@ function App() {
                       placeholder='Type to search'
                     />
                     <Button variant="primary" onClick={() => { setNewName(""); setNewAge(""); setNewContactNumber(""); setEditId(null); handleShow(); }}>
-                      <CIcon icon={icon.cilUserPlus} className="size" /> ADD USER
+                      <CIcon icon={icon.cilUserPlus} className="size" /> ADD MEMBER
                     </Button>
 
                     {/* Modal */}
@@ -320,24 +387,28 @@ function App() {
                         <Modal.Title>{editId ? "EDIT MEMBER" : "ADD MEMBER"}</Modal.Title>
                       </Modal.Header>
                       <Modal.Body>
+                NAME:
                 <center>
                   <input
-                    placeholder="Name"
                     className="form-control"
                     value={newName}
                     onChange={(event) => setNewName(event.target.value)}
                   />
-                  <input
+                  </center>
+                  AGE:
+                  <center>
+                    <input
                     type="number"
                     className="form-control"
-                    placeholder="Age"
                     value={newAge}
                     onChange={(event) => setNewAge(event.target.value)}
                   />
+                  </center>
+                  CONTACT NUMBER:
+                  <center>
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Contact Number"
                     value={newContactNumber}
                     onChange={(event) => setNewContactNumber(event.target.value)}
                   />
@@ -353,11 +424,60 @@ function App() {
                           </Button>
                         ) : (
                           <Button variant="primary" onClick={createUser}>
-                            Save Changes
+                            ADD NEW MEMBER
                           </Button>
                         )}
                       </Modal.Footer>
                     </Modal>
+                    <div id="modal" inert>
+                    <Modal show={showDeceasedModal} onHide={() => setShowDeceasedModal(false)}>
+                  <Modal.Header closeButton>
+                   <Modal.Title style={{ textAlign: 'center' }}>PAYMENTS STATUS</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                  <Table striped bordered hover>
+                    <thead>
+                      <tr>
+                        <th>Select</th>
+                        <th>Name</th>
+                        <th>Payment Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {deceasedUsers.map((user) => (
+                        <tr key={user.id}>
+                          <td>
+                            <input
+                              type="radio"
+                              name="status"
+                              value={user.id}
+                              onChange={() => setSelectedDeceasedUser(user.id)}
+                            />
+                          </td>
+                          <td>{user.name}</td>
+                          <td>
+                        {isHasPayment(user.id) ? (
+                          <button className="btn btn-success">Paid</button>
+                        ) : (
+                          <button className="btn btn-danger">Unpaid</button>
+                        )}
+                      </td>
+
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowDeceasedModal(false)}>
+                      Close
+                    </Button>
+                    <Button variant="primary" onClick={updatePaymentStatusForDeceased}>
+                      Update Payment Status
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+                </div>
                     <br />
                     <br />
 
@@ -409,15 +529,14 @@ function App() {
                             <td className="col-actions">
                               {/* Conditionally render the payment status button */}
                               {hasDeceasedUsers && dropdownStatus[user.id] !== 'DECEASED' && (
-                                <Button
-                                  variant={buttonStatus[user.id] || 'danger'}
-                                  onClick={() => handleStatusToggle(user.id)}
-                                >
-                                  <CIcon
-                                    icon={buttonStatus[user.id] === 'success' ? icon.cilCheckCircle : icon.cilXCircle}
-                                    className="size"
-                                  />
-                                </Button>
+                                
+                                  <Button variant="danger" onClick={() => handleShowDeceased(user.id)}>
+                                Pay
+                                    </Button>
+
+
+                                  
+                                
                               )}
                               
                               {dropdownStatus[user.id] === 'DECEASED' && (

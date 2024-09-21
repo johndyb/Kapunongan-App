@@ -1,38 +1,53 @@
-.custom-container {
-  margin: 30px;
-  
+.container {
+  margin-top: 20px; /* Add some margin to the top */
 }
 
+.card-container {
+  border-radius: 10px; /* Rounded corners */
+  padding: 20px; /* Padding inside the card */
+  color: white; /* Text color */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
+}
+
+.total-members {
+  background-color: #007bff; /* Blue background */
+  height: 35%;
+}
+
+.deceased-members {
+  background-color: #dc3545; /* Red background */
+  height: 35%;
+ 
+}
+.new-members {
+  background-color: #14945f; /* Red background */
+  height: 35%;
+}
+.calendar {
+  background-color: #05acee; /* Green background */
+}
 .profile {
   font-size: 2rem;
 }
+
 
 .react-calendar {
   max-width: 300px;
   margin: 0 auto;
 }
-.nav-link {
-  color: white; /* Default color for links */
-  
+.sidebar {
+  width: 200px; /* Adjust as needed */
+  background-color: #f8f9fa; /* Sidebar background color */
 }
 
-.nav-link.active {
-  background-color: #007bff; /* Active link color */
-  color: white; /* Text color for active link */
+.sidebar a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #333; /* Default text color */
 }
 
-.dropdown-toggle {
-  color: white; /* Dropdown text color */
-}
-
-.dropdown-menu {
-  background-color: #343a40; /* Dropdown background color */
-}
-
-.dropdown-item {
-  color: white; /* Dropdown item text color */
-}
-
-.dropdown-item:hover {
-  background-color: #007bff; /* Dropdown item hover color */
+.sidebar a.active {
+  background-color: #007bff; /* Active background color */
+  color: white; /* Active text color */
 }
