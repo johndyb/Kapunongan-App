@@ -74,7 +74,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
+    <div className="mobile-menu">
       <h1>Dashboard</h1>
       <p>Welcome to the Dashboard!</p>
 

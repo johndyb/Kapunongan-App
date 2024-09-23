@@ -21,6 +21,7 @@ import { serverTimestamp } from "firebase/firestore";
 
 
 
+
 function App() {
   
   
@@ -263,49 +264,62 @@ function App() {
       console.error("Error updating status: ", error);
     }
   };
+  const [selectedDeceasedUsers, setSelectedDeceasedUsers] = useState([]); // Array for multiple selections
+
 
   const updatePaymentStatusForDeceased = async () => {
-    if (selectedDeceasedUser && payorId) {
-        try {
-            console.log("Updating payment status...");
-            const userDoc = doc(db, "users", selectedDeceasedUser);
-            console.log("Payment status updated in user document.");
-            const currentStatus = buttonStatus[selectedDeceasedUser] || 'danger';
-            const newStatus = currentStatus === 'success' ? 'danger' : 'success';
-
-          
-            await updateDoc(userDoc, { payment: newStatus });
-
-       
-            await addDoc(collection(db, "payments"), {
-                userId: selectedDeceasedUser,
-                payeeId: selectedDeceasedUser, 
-                payorId: payorId, 
-                status: newStatus,
-                timestamp: serverTimestamp(),
-            });
-            console.log("Payment record added to Firestore.");
-            setButtonStatus(prevState => ({
-                ...prevState,
-                [selectedDeceasedUser]: newStatus,
-            }));
-
-            Swal.fire({
-              title: `Payment Status `,
-              text: 'Your payment was successful!',
-              icon: 'success',
-              confirmButtonText: 'OK'
-            });
-            setShowDeceasedModal(false);
-            setSelectedDeceasedUser(null);
-        } catch (error) {
-            Swal.fire("Error updating payment status!");
-            console.error("Error updating payment status: ", error);
+    if (selectedDeceasedUsers.length > 0 && payorId) {
+      try {
+        for (const userId of selectedDeceasedUsers) {
+          const userDoc = doc(db, "users", userId);
+          const currentStatus = buttonStatus[userId] || 'danger';
+          const newStatus = currentStatus === 'success' ? 'danger' : 'success';
+  
+          await updateDoc(userDoc, { payment: newStatus });
+  
+          await addDoc(collection(db, "payments"), {
+            userId: userId,
+            payeeId: userId,
+            payorId: payorId,
+            status: newStatus,
+            timestamp: serverTimestamp(),
+          });
+  
+          setButtonStatus(prevState => ({
+            ...prevState,
+            [userId]: newStatus,
+          }));
         }
+  
+        Swal.fire({
+          title: `Payment Status`,
+          text: 'Payment status updated successfully!',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+        setShowDeceasedModal(false);
+        setSelectedDeceasedUsers([]); // Clear selections after update
+      } catch (error) {
+        Swal.fire("Error updating payment status!");
+        console.error("Error updating payment status: ", error);
+      }
     } else {
-        Swal.fire("User ID or Payor ID is not defined!");
+      Swal.fire("No users selected or Payor ID is not defined!");
     }
-};
+  };
+  const handleCheckboxChange = (userId) => {
+    setSelectedDeceasedUsers((prev) => {
+      if (prev.includes(userId)) {
+        // If already selected, remove it
+        return prev.filter(id => id !== userId);
+      } else {
+        // If not selected, add it
+        return [...prev, userId];
+      }
+    });
+  };
+  
+  
 
   
 
@@ -329,13 +343,11 @@ function App() {
   }
 
   return (
-    
     <Router>
       <div className="App">
-        
-      <div className="container-fluid ">
+      <div className="container-fluid mobile-menu">
           <div className="row flex-nowrap">
-            <div className="col-md-3 col-xl-1  px-0 bg-dark ">
+            <div className="col-md-3 col-xl-1 side-bar  px-0 bg-dark ">
               <div className="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
                 <Link to="/" className="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                   <span className="fs-5 d-none d-sm-inline">Menu</span>
@@ -349,7 +361,7 @@ function App() {
                     to="/"
                     activeClassName="active" // Apply active class
                   >
-                    <CIcon icon={icon.cilHome} className="profile" /> <span className="ms-1 d-none d-sm-inline">Home</span>
+                    <CIcon icon={icon.cilHome} className="profile" /> <span className="ms-1 d-none d-sm-inline ">Home</span>
                   </NavLink>
                   <br />
                 </li>
@@ -359,7 +371,7 @@ function App() {
                     to="/dashboard"
                     activeClassName="active" // Apply active class
                   >
-                    <CIcon icon={icon.cilColorPalette} className="profile" /> <span className="ms-1 d-none d-sm-inline">Dashboard</span>
+                    <CIcon icon={icon.cilColorPalette} className="profile dashboard-size" /> <span className="ms-1 d-none d-sm-inline ">Dashboard</span>
                   </NavLink>
                 </li>
               </ul>
@@ -460,14 +472,16 @@ function App() {
                     <tbody>
                       {deceasedUsers.map((user) => (
                         <tr key={user.id}>
-                          <td>
-                            <input
-                              type="radio"
-                              name="status"
-                              value={user.id}
-                              onChange={() => setSelectedDeceasedUser(user.id)}
-                            />
-                          </td>
+                         <td className="table-radio">
+                          <input
+                            type="checkbox"
+                            name="status"
+                            value={user.id}
+                            checked={selectedDeceasedUsers.includes(user.id)} // Controlled checkbox state
+                            onChange={() => handleCheckboxChange(user.id)}
+                          />
+                        </td>
+
                           <td>{user.name}</td>
                           <td>
                         {isHasPayment(user.id) ? (
@@ -494,9 +508,8 @@ function App() {
                 </div>
                     <br />
                     <br />
-
                     {/* Table */}
-                    <Table striped bordered hover className="table theader">
+                    <Table striped bordered hover className="table table-size">
                       <thead>
                       <tr>
                       <th>NAME</th>
@@ -548,10 +561,7 @@ function App() {
                                 Pay
                                     </Button>
 
-
-                                  
-                                
-                              )}
+                                       )}
                               
                               {dropdownStatus[user.id] === 'DECEASED' && (
                                 <Button

@@ -131,8 +131,6 @@ html, body {
   text-align: left; /* Align text to the left */
   padding: 20px; /* Add some padding for better spacing */
   margin: 0; /* Remove default margin if necessary */
-  width: 20%; /* Adjust the width to be more visible, e.g., 70% */
-  border: 3px solid #d3b99f; /* Add a border with a color */
   border-radius: 8px; /* Rounded corners for a softer look */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for a lifted effect */
 }
@@ -203,5 +201,49 @@ html, body {
   margin-bottom: 40px; /* Adjust this value to move the image up */
 }
 
+.table-radio {
+  display: flex;
+  justify-content: center; /* Centers the content horizontally */
+  align-items: center; /* Centers the content vertically */
+  height: 100%; /* Ensures full height for vertical centering */
+}
 
+@media (max-width: 576px) {
+  
+  .mobile-menu {
+   
+    .nav-link {
+      text-decoration: none;
+      transition: color 0.3s, background-color 0.3s, padding 0.3s; /* Smooth transition for color changes */
+      padding: 10px 15px; /* Add padding for better click area */
+      border-radius: 4px; /* Rounded corners */
+      width: 30px;
+    }
+    .side-bar{
+      width: 100px;
+      height: auto;
+      
+    }
+    .font-size{
+      font-size: 10px;
+    }
+    .round-image {
+      margin-top:610px;
+      border-radius: 50%; /* Makes the image round */
+      width:70px; /* Set your desired width */
+      height: 70px; /* Set your desired height */
+      object-fit: cover; /* Ensures the image covers the area without distortion */
+      margin-bottom: 30px; /* Adjust this value to move the image up */
+    }
+    .nav-link {
+      color: rgb(13, 213, 240);
+      text-decoration: none;
+      padding: 10px 15px; /* Add padding for better click area */
+      border-radius: 4px; /* Rounded corners */
+      width: 80px;
+    }
+   
+  }
+  
+}
 

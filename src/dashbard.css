@@ -51,3 +51,35 @@
   background-color: #007bff; /* Active background color */
   color: white; /* Active text color */
 }
+
+@media (max-width: 600px) {
+  
+  .mobile-menu {
+    .card-container {
+      border-radius: 10px; /* Rounded corners */
+      padding: 20px; /* Padding inside the card */
+      color: white; /* Text color */
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    }
+    
+    .total-members {
+      background-color: #007bff; /* Blue background */
+      height: 150px;
+    }
+    
+    .deceased-members {
+      background-color: #dc3545; /* Red background */
+      height: 150px;
+     
+    }
+    .new-members {
+      background-color: #14945f; /* Red background */
+      height: 150px;
+    }
+    .sidebar {
+      width: 10px; /* Adjust as needed */
+      background-color: #f8f9fa; /* Sidebar background color */
+    }
+  }
+  
+}
