@@ -395,7 +395,14 @@ function App() {
               <Routes>
                 <Route path="/" element={
                   <>
-                    <CIcon icon={icon.cilSearch} className="size1" />
+                  <Button variant="primary" onClick={() => { setNewName(""); setNewAge(""); setNewContactNumber(""); setEditId(null); handleShow(); }}>
+                      <CIcon icon={icon.cilUserPlus} className="size" /> ADD MEMBER
+                    </Button>
+                    
+                    <center>
+                   <br/>
+                   <br/>
+                    
                     <input
                       type="text"
                       className="custom-size"
@@ -403,10 +410,11 @@ function App() {
                       onChange={handleInputChange}
                       placeholder='Type to search'
                     />
-                    <Button variant="primary" onClick={() => { setNewName(""); setNewAge(""); setNewContactNumber(""); setEditId(null); handleShow(); }}>
-                      <CIcon icon={icon.cilUserPlus} className="size" /> ADD MEMBER
-                    </Button>
-
+                     <CIcon icon={icon.cilSearch} className="size1" />
+                    </center>
+                  
+                    
+                   
                     {/* Modal */}
                     <Modal show={show} onHide={handleClose}>
                       <Modal.Header closeButton>
@@ -506,10 +514,10 @@ function App() {
                   </Modal.Footer>
                 </Modal>
                 </div>
-                    <br />
-                    <br />
+                    
                     {/* Table */}
-                    <Table striped bordered hover className="table table-size">
+                    <div className=" table card-container container">
+                    <Table striped bordered hover >
                       <thead>
                       <tr>
                       <th>NAME</th>
@@ -580,6 +588,7 @@ function App() {
                         ))}
                       </tbody>
                     </Table>
+                    </div>
                     {/* Pagination */}
                     <nav aria-label="Page navigation example">
                       <ul className="pagination justify-content-center">

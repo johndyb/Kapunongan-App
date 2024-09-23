@@ -83,7 +83,7 @@ const Dashboard = () => {
           {/* Total Members */}
           <div className="col">
             <div className="card-container total-members">
-            <br/>
+           
               <CIcon icon={icon.cilPeople} className="profile" />
               <p>TOTAL MEMBERS: {userCount}</p>
             </div>
@@ -97,6 +97,7 @@ const Dashboard = () => {
               <p>TOTAL DECEASED MEMBERS: {deceasedCount}</p>
             </div>
           </div>
+          
 
           {/* New Members This Month */}
           <div className="col">

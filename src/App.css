@@ -52,7 +52,7 @@
 }
 .size1{
 
-  height: 40px;
+  height: 30px;
 }
 .profile{
   height: 30px;
@@ -208,6 +208,7 @@ html, body {
   height: 100%; /* Ensures full height for vertical centering */
 }
 
+
 @media (max-width: 576px) {
   
   .mobile-menu {
@@ -228,7 +229,7 @@ html, body {
       font-size: 10px;
     }
     .round-image {
-      margin-top:610px;
+     margin-top:850%;
       border-radius: 50%; /* Makes the image round */
       width:70px; /* Set your desired width */
       height: 70px; /* Set your desired height */
@@ -242,6 +243,42 @@ html, body {
       border-radius: 4px; /* Rounded corners */
       width: 80px;
     }
+    
+    .card-container {
+      width: 100%; /* Full width */
+      max-width: 600px; /* Maximum width for larger screens */
+      border-radius: 10px; /* Rounded corners */
+      padding: 20px; /* Padding inside the card */
+      color: white; /* Text color */
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    }
+    
+    .table {
+      width: 100%; /* Ensure the table takes full width of the container */
+      table-layout: auto; /* Use automatic layout */
+      
+    }
+    
+    .table th,
+    .table td {
+      white-space: nowrap; /* Prevent text from wrapping */
+      overflow: hidden; /* Hide overflow content */
+      text-overflow: ellipsis; /* Show ellipsis for overflowed text */
+      padding: 10px; /* Padding for table cells */
+    }
+    
+    .table th {
+      width: 33.33%; /* Divide the width evenly among three columns */
+    }
+    
+    .table td {
+      width: 33.33%; /* Keep consistent with headers */
+    }
+    
+   
+    
+    
+    
    
   }
   
