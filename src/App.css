@@ -245,10 +245,10 @@ html, body {
     }
     
     .card-container {
-      width: 100%; /* Full width */
+      width: auto; /* Full width */
       max-width: 600px; /* Maximum width for larger screens */
       border-radius: 10px; /* Rounded corners */
-      padding: 20px; /* Padding inside the card */
+      margin: 0 auto; /* Center the container */
       color: white; /* Text color */
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
     }
@@ -256,24 +256,20 @@ html, body {
     .table {
       width: 100%; /* Ensure the table takes full width of the container */
       table-layout: auto; /* Use automatic layout */
-      
     }
     
     .table th,
     .table td {
       white-space: nowrap; /* Prevent text from wrapping */
-      overflow: hidden; /* Hide overflow content */
-      text-overflow: ellipsis; /* Show ellipsis for overflowed text */
-      padding: 10px; /* Padding for table cells */
+      
     }
     
-    .table th {
-      width: 33.33%; /* Divide the width evenly among three columns */
+    /* Optional: Add spacing between rows */
+    .table tr {
+      margin-bottom: 10px; /* Add space between rows */
     }
     
-    .table td {
-      width: 33.33%; /* Keep consistent with headers */
-    }
+    
     
    
     

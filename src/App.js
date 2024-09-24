@@ -532,9 +532,9 @@ function App() {
                       <tbody>
                         {currentUsers.map((user) => (
                           <tr key={user.id}>
-                            <td>{user.name}</td>
-                            <td className="col-actions1">{user.age}</td>
-                            <td className="col-actions1">{user.contactNumber}</td> {/* New cell */}
+                            <td >{user.name}</td>
+                            <td className="col-actions1 ">{user.age}</td>
+                            <td className="col-actions1 col-actions11">{user.contactNumber}</td> {/* New cell */}
                             <td className="col-actions1">
                             <Button variant="danger" onClick={() => deleteUser(user.id)}>
                               <CIcon icon={icon.cilTrash} className="size" />
