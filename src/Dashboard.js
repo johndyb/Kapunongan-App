@@ -80,6 +80,7 @@ const Dashboard = () => {
 
       <div className="container">
         <div className="row text-center">
+
           {/* Total Members */}
           <div className="col">
             <div className="card-container total-members">
@@ -92,7 +93,7 @@ const Dashboard = () => {
           {/* Deceased Members */}
           <div className="col">
             <div className="card-container deceased-members">
-            <br/>
+        
               <CIcon icon={icon.cilUserUnfollow} className="profile" />
               <p>TOTAL DECEASED MEMBERS: {deceasedCount}</p>
             </div>

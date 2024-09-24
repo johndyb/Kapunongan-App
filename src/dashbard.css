@@ -56,6 +56,7 @@
   
   .mobile-menu {
     .card-container {
+      width: auto; /* Full width */
       border-radius: 10px; /* Rounded corners */
       padding: 20px; /* Padding inside the card */
       color: white; /* Text color */

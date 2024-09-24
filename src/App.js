@@ -155,21 +155,35 @@ function App() {
 
   // Delete user
   const deleteUser = async (id) => {
-    try {
-      const userDoc = doc(db, "users", id);
-      await deleteDoc(userDoc);
-      forceUpdate();
-      Swal.fire({
-        title: `DELETED `,
-        text: 'Member Deleted!',
-        icon: 'success',
-        confirmButtonText: 'OK'
-      });
-    } catch (error) {
-      Swal.fire("Error deleting user!");
-      console.error("Error deleting user: ", error);
+    // Show confirmation dialog
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "This action cannot be undone!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+    });
+  
+    // Proceed only if the user confirms
+    if (result.isConfirmed) {
+      try {
+        const userDoc = doc(db, "users", id);
+        await deleteDoc(userDoc);
+        forceUpdate();
+        Swal.fire({
+          title: 'Deleted!',
+          text: 'Member Deleted!',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      } catch (error) {
+        Swal.fire("Error deleting user!");
+        console.error("Error deleting user: ", error);
+      }
     }
   };
+  
 
   // Handle edit button click
   const handleEdit = (id, name, age, contactNumber) => {
